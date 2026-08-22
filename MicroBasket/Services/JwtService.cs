@@ -14,13 +14,13 @@ namespace Authentication_Authorization.Services
         {
             _config = config;
         }
-        public string GenerateToken(JwtDTO user)
+        public string GenerateToken(LoginResponseDTO user)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
-                new Claim(ClaimTypes.Name,user.Name),
-                new Claim(ClaimTypes.Email,user.Email),
+                new Claim(ClaimTypes.NameIdentifier,user.UserId.ToString()),
+                new Claim(ClaimTypes.Name,user.UserName),
+                new Claim(ClaimTypes.Email,user.UserEmail),
                 new Claim(ClaimTypes.Role,user.Role)
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
