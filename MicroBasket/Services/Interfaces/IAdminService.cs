@@ -1,7 +1,11 @@
-﻿namespace MicroBasket.Services.Interfaces
+﻿using MicroBasket.Models;
+using MicroBasket.Models.DTOs;
+
+namespace MicroBasket.Services.Interfaces
 {
     public interface IAdminService
     {
-        Task<(bool Success, string Message)> ModifyUserStatusAsync(int uid, bool status);
+        Task<ServiceResponseDTO> ModifyUserStatusAsync(int uid, bool status);
+        
     }
 }

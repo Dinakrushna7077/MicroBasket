@@ -1,4 +1,6 @@
-﻿using MicroBasket.Repository.Interfaces;
+﻿using MicroBasket.Models;
+using MicroBasket.Models.DTOs;
+using MicroBasket.Repository.Interfaces;
 using MicroBasket.Services.Interfaces;
 
 namespace MicroBasket.Services
@@ -11,10 +13,20 @@ namespace MicroBasket.Services
             _db = db;
         }
 
-        public async Task<(bool Success,string Message)>ModifyUserStatusAsync(int uid,bool status)
+        public async Task<ServiceResponseDTO> ModifyUserStatusAsync(int uid,bool status)
         {
             int n=await _db.ModifyUserStatus(uid, status);
-            return n > 0 ? (true, "Status Updated") : (false, "Something went wrong please try again later...!");
+
+            return n > 0 ? 
+                new ServiceResponseDTO() {
+                    Success = true, 
+                    Message = "Status Updated" 
+                } :
+                new ServiceResponseDTO() { 
+                    Success = true, 
+                    Message = "Something went wrong please try again later...!" 
+                };
         }
+        
     }
 }
