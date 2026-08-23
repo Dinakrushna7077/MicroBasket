@@ -1,4 +1,5 @@
 ﻿using MicroBasket.Models;
+using MicroBasket.Models.DTOs;
 using MicroBasket.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,36 +13,24 @@ namespace MicroBasket.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _admin;
-        private readonly IProductService _prod;
         public AdminController(IAdminService admin,IProductService prod)
         {
             _admin = admin;
-            _prod = prod;
         }
         [HttpGet("modify-access/{uid}/{status}")]
-        public async Task<IActionResult>ModifyLoginAccess(int uid,bool status)
+        public async Task<IActionResult>GetLoginAccess(int uid,bool status)
         {
             var response= await _admin.ModifyUserStatusAsync(uid, status);
 
             return response.Success ? Ok(response.Message) : BadRequest(response.Message);
         }
-        public async Task<IActionResult>AddProduct(Product prod)
+        [HttpGet("users")]
+        public async Task<IActionResult> GetUserList()
         {
-            var response=await _prod.CreateProductAsync(prod);
-            if(!response.Success)
-            {
-                return BadRequest(response.Message);
-            }
-            return Ok(response.Message);
+            var userList = await _admin.GetAllUsersAsync();
+            return Ok(userList);
         }
-        public async Task<IActionResult>UpdateProduct(Product prod)
-        {
-            var response=await _prod.UpdateProductAsync(prod);
-            if(!response.Success)
-            {
-                return BadRequest(response.Message);
-            }
-            return Ok(response.Message);
-        }
+        
+
     }
 }

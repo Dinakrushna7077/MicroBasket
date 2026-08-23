@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using MicroBasket.Data;
 using MicroBasket.Models;
+using MicroBasket.Models.DTOs;
 using MicroBasket.Repository.Interfaces;
 using System.Data;
 
@@ -9,7 +10,7 @@ namespace MicroBasket.Repository
     public class ProductRepository:DapperContext,IProductRepository
     {
         public ProductRepository(IConfiguration _config) : base(_config) { }
-        public async Task<int> CreateOrUpdateProduct(Product prod)
+        public async Task<int> CreateOrUpdateProduct(ProductDTO prod)
         {
             try
             {
@@ -17,6 +18,7 @@ namespace MicroBasket.Repository
                 if (prod.Id > 0)
                 {
                     param.Add("@action", "Update");
+                    param.Add("@id", prod.Id);
                     param.Add("@updateDT", DateTime.Now);
                 }
                 else
@@ -36,6 +38,53 @@ namespace MicroBasket.Repository
             catch
             {
                 return -10;
+            }
+        }
+        public async Task<List<Product>> GetAllProducts()
+        {
+            try
+            {
+                DynamicParameters param = new DynamicParameters();
+                param.Add("@action", "AllProducts");
+                var con= GetConnection();
+
+                return (await con.QueryAsync<Product>("ManageProducts", param, commandType: CommandType.StoredProcedure)).ToList();
+            }
+            catch
+            {
+                return new List<Product>();
+            }
+        }
+        public async Task<List<Product>> SearchProduct(string search)
+        {
+            try
+            {
+                DynamicParameters param = new DynamicParameters();
+                param.Add("@action", "Search");
+                param.Add("@keyword", search);
+                var con = GetConnection();
+
+                return (await con.QueryAsync<Product>("ManageProducts", param, commandType: CommandType.StoredProcedure)).ToList();
+            }
+            catch
+            {
+                return new List<Product>();
+            }
+        }
+        public async Task<Product> GetProductById(long pid)
+        {
+            try
+            {
+                DynamicParameters param = new DynamicParameters();
+                param.Add("@action", "Select");
+                param.Add("@id", pid);
+                var con = GetConnection();
+
+                return await con.QueryFirstOrDefaultAsync<Product>("ManageProducts", param, commandType: CommandType.StoredProcedure);
+            }
+            catch
+            {
+                return new Product();
             }
         }
     }

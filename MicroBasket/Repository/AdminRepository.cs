@@ -20,7 +20,7 @@ namespace MicroBasket.Repository
                 param.Add("@status", status);
 
                 var con = GetConnection();
-                int x = await con.ExecuteAsync("ProcLogInSignIn", param, commandType: CommandType.StoredProcedure);
+                int x = await con.ExecuteAsync("ProcManageuser", param, commandType: CommandType.StoredProcedure);
                 return await Task.FromResult(x);
             }
             catch
@@ -28,6 +28,19 @@ namespace MicroBasket.Repository
                 return -10;
             }
         }
-        
+        public async Task<List<Customer>> GetAllUsers()
+        {
+            try
+            {
+                DynamicParameters param = new DynamicParameters();
+                param.Add("@action", "SelectAll");
+                var con = GetConnection();
+                return (await con.QueryAsync<Customer>("ProcManageuser", param, commandType: CommandType.StoredProcedure)).ToList();
+            }
+            catch
+            {
+                return new List<Customer>();
+            }
+        }
     }
 }

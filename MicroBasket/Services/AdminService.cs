@@ -27,6 +27,11 @@ namespace MicroBasket.Services
                     Message = "Something went wrong please try again later...!" 
                 };
         }
-        
+        public async Task<List<Customer>> GetAllUsersAsync()
+        {
+            return await _db.GetAllUsers();
+        }
+
+
     }
 }
