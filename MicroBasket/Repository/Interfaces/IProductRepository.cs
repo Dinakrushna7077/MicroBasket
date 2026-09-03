@@ -9,5 +9,6 @@ namespace MicroBasket.Repository.Interfaces
         Task<List<Product>> GetAllProducts();
         Task<List<Product>> SearchProduct(string search);
         Task<Product> GetProductById(long pid);
+        Task<List<LowStockDTO>> LowStockProducts();
     }
 }

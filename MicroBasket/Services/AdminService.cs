@@ -31,6 +31,10 @@ namespace MicroBasket.Services
         {
             return await _db.GetAllUsers();
         }
+        public async Task<ReportDTO> GetReportAsync()
+        {
+            return await _db.Reports();
+        }
 
 
     }

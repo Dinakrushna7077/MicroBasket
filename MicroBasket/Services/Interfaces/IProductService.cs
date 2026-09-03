@@ -10,5 +10,6 @@ namespace MicroBasket.Services.Interfaces
         Task<List<Product>> GetAllProductsAsync();
         Task<List<Product>> SearchProductAsync(string search);
         Task<Product> GetProductByIdAsync(long pid);
+        Task<List<LowStockDTO>> LowStockProductsAsync();
     }
 }

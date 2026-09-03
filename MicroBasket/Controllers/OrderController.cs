@@ -30,6 +30,7 @@ namespace MicroBasket.Controllers
             var orders = await _service.FilterOrderListAsync(status);
             return Ok(orders);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPatch("update-order-status")]
         public async Task<IActionResult>PutOrderStatus(UpdateOrderDTO data)
         {
@@ -37,6 +38,7 @@ namespace MicroBasket.Controllers
             return !response.Success?BadRequest(response.Message): Ok(response.Message);
         }
         [HttpPost("place-order")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult>PostOrder(OrderRequestDTO dto)
         {
             var response=await _service.PlaceOrderAsync(dto);

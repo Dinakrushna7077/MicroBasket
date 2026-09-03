@@ -1,4 +1,5 @@
 ﻿using MicroBasket.Models;
+using MicroBasket.Models.DTOs;
 
 namespace MicroBasket.Repository.Interfaces
 {
@@ -6,5 +7,6 @@ namespace MicroBasket.Repository.Interfaces
     {
         Task<int> ModifyUserStatus(int userId, bool status);
         Task<List<Customer>> GetAllUsers();
+        Task<ReportDTO> Reports();
     }
 }

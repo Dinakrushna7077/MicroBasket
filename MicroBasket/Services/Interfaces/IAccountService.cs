@@ -6,7 +6,7 @@ namespace MicroBasket.Services.Interfaces
     public interface IAccountService
     {
         Task<(LoginResponseDTO Data, bool Success, string Message)> LoginAsync(LoginRequestDTO data);
-        Task<(bool Success, string Message)> SignInAsync(Customer cust);
+        Task<(bool Success, string Message)> SignInAsync(RegisterRequestDTO dto);
 
     }
 }

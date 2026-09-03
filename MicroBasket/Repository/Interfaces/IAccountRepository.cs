@@ -6,6 +6,6 @@ namespace MicroBasket.Repository.Interfaces
     public interface IAccountRepository
     {
         Task<UserDTO> GetUserByEmail(string email);
-        Task<int> CreateCustomer(Customer cust);
+        Task<int> CreateCustomer(RegisterRequestDTO dto);
     }
 }

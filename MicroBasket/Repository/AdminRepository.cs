@@ -1,8 +1,9 @@
 ﻿using Dapper;
 using MicroBasket.Data;
-using System.Data;
-using MicroBasket.Repository.Interfaces;
 using MicroBasket.Models;
+using MicroBasket.Models.DTOs;
+using MicroBasket.Repository.Interfaces;
+using System.Data;
 
 namespace MicroBasket.Repository
 {
@@ -40,6 +41,21 @@ namespace MicroBasket.Repository
             catch
             {
                 return new List<Customer>();
+            }
+        }
+        public async Task<ReportDTO> Reports()
+        {
+            try
+            {
+                DynamicParameters param = new DynamicParameters();
+                param.Add("@action", "Reports");
+
+                var con = GetConnection();
+                return await con.QueryFirstOrDefaultAsync<ReportDTO>("ProcManageOrders", param, commandType: CommandType.StoredProcedure);
+            }
+            catch
+            {
+                return new ReportDTO();
             }
         }
     }

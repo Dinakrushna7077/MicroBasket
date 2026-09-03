@@ -53,12 +53,26 @@ namespace MicroBasket.Repository
                 DynamicParameters param = new DynamicParameters();
                 param.Add("@action", "PlaceOrder");
                 param.Add("@custId", dto.CustId);
-                param.Add("@prodId", dto.ProdId);
-                param.Add("@quantity", dto.Quantity);
                 param.Add("@status", "Pending");
+                param.Add("@newOrderId", dbType: DbType.Int64, direction: ParameterDirection.Output);
 
                 var con = GetConnection();
                 int x = await con.ExecuteAsync("ProcManageOrders", param, commandType: CommandType.StoredProcedure);
+                if(x<0)
+                {
+                    return await Task.FromResult(x);
+                }
+                long newOrderId = param.Get<long>("@newOrderId");
+                foreach (var prod in dto.CartDTOs)
+                {
+                    DynamicParameters detailsParam = new DynamicParameters();
+                    detailsParam.Add("@action", "OrderDetails");
+                    detailsParam.Add("@prodId", prod.ProdId);
+                    detailsParam.Add("@quantity", prod.Quantity);
+                    detailsParam.Add("@orderId", newOrderId);
+                    int y = await con.ExecuteAsync("ProcManageOrders", detailsParam, commandType: CommandType.StoredProcedure);
+                }
+
                 return await Task.FromResult(x);
             }
             catch
@@ -82,7 +96,7 @@ namespace MicroBasket.Repository
                 return new List<OrderListDTO>();
             }
         }
-        public async Task<OrderDetailsDTO> GetOrderDetails(long oid)
+        public async Task<List<OrderDetailsDTO>> GetOrderDetails(long oid)
         {
             try
             {
@@ -91,12 +105,28 @@ namespace MicroBasket.Repository
                 param.Add("@orderId", oid);
 
                 var con = GetConnection();
-                return await con.QueryFirstOrDefaultAsync<OrderDetailsDTO>("ProcManageOrders", param, commandType: CommandType.StoredProcedure);
+                return (await con.QueryAsync<OrderDetailsDTO>("ProcManageOrders", param, commandType: CommandType.StoredProcedure)).ToList();
             }
             catch
             {
-                return new OrderDetailsDTO();
+                return new List<OrderDetailsDTO>();
             }
         }
+        public async Task<List<OrderListDTO>> GetRecentOrder()
+        {
+            try
+            {
+                DynamicParameters param = new DynamicParameters();
+                param.Add("@action", "RecentOrders");
+
+                var con = GetConnection();
+                return (await con.QueryAsync<OrderListDTO>("ProcManageOrders", param, commandType: CommandType.StoredProcedure)).ToList();
+            }
+            catch
+            {
+                return new List<OrderListDTO>();
+            }
+        }
+        
     }
 }

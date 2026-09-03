@@ -40,14 +40,14 @@ namespace MicroBasket.Services
             true, 
             "");
         }
-        public async Task<(bool Success,string Message)> SignInAsync(Customer cust)
+        public async Task<(bool Success,string Message)> SignInAsync(RegisterRequestDTO dto)
         {
-            var user = await _repo.GetUserByEmail(cust.UserEmail);
+            var user = await _repo.GetUserByEmail(dto.UserEmail);
             if(user!=null)
             {
                 return (false, "Email id already registered ! please login...");
             }
-            int n=await _repo.CreateCustomer(cust);
+            int n=await _repo.CreateCustomer(dto);
             if(n<=0)
             {
                 return (false,"Unable to Registered ! Please try again after some time...");

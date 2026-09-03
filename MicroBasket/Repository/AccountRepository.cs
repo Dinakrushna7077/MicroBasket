@@ -26,17 +26,17 @@ namespace MicroBasket.Repository
             }
         }
         
-        public async Task<int> CreateCustomer(Customer cust)
+        public async Task<int> CreateCustomer(RegisterRequestDTO dto)
         {
             try
             {
                 DynamicParameters param = new DynamicParameters();
                 param.Add("@action", "SignIn");
-                param.Add("@name", cust.UserName);
-                param.Add("@phone", cust.UserPhone);
-                param.Add("@email", cust.UserEmail);
-                param.Add("@add", cust.UserAdd);
-                param.Add("@password", cust.Password);
+                param.Add("@name", dto.UserName);
+                param.Add("@phone", dto.UserPhone);
+                param.Add("@email", dto.UserEmail);
+                param.Add("@add", dto.UserAdd);
+                param.Add("@password", dto.Password);
                 var con = GetConnection();
                 int x=await con.ExecuteAsync("ProcLogInSignIn", param, commandType: CommandType.StoredProcedure);
                 return await Task.FromResult(x);

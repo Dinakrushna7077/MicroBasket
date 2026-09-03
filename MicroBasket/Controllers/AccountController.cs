@@ -32,15 +32,11 @@ namespace MicroBasket.Controllers
             loginResponse.Token = _jwt.GenerateToken(loginResponse);
             return Ok(loginResponse);
         }
-        [HttpPost("sign-in")]
-        public async Task<IActionResult> SignIn(Customer cust)
+        [HttpPost("register")]
+        public async Task<IActionResult> SignIn(RegisterRequestDTO dto)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-            cust.Password = BCrypt.Net.BCrypt.HashPassword(cust.Password);
-            var response=await _service.SignInAsync(cust);
+            dto.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+            var response=await _service.SignInAsync(dto);
             if(!response.Success)
             {
                 return BadRequest(response.Message);

@@ -9,6 +9,7 @@ namespace MicroBasket.Services.Interfaces
         Task<List<OrdersDTO>> OrderListAsync(long id);
         Task<List<OrderListDTO>> FilterOrderListAsync(string status);
         Task<ServiceResponseDTO> UpdateOrderStatusAsync(UpdateOrderDTO data);
-        Task<OrderDetailsDTO> GetOrderDetailsAsync(long oid);
+        Task<List<OrderDetailsDTO>> GetOrderDetailsAsync(long oid);
+        Task<List<OrderListDTO>> GetRecentOrderAsync();
     }
 }

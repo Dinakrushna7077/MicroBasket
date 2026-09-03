@@ -35,7 +35,7 @@ namespace MicroBasket.Controllers
         public async Task<IActionResult> PatchPassword(ChangePasswordDTO dto)
         {
             var response = await _db.ChangePasswordAsync(dto);
-            return !response.Success ? BadRequest(response.Message) : Ok(response);
+            return !response.Success ? BadRequest(response.Message) : Ok(response.Message);
         }
     }
 }

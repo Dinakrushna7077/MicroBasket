@@ -7,5 +7,6 @@ namespace MicroBasket.Services.Interfaces
     {
         Task<ServiceResponseDTO> ModifyUserStatusAsync(int uid, bool status);
         Task<List<Customer>> GetAllUsersAsync();
+        Task<ReportDTO> GetReportAsync();
     }
 }

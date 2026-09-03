@@ -9,13 +9,15 @@ namespace MicroBasket.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _prod;
-        public ProductController(IAdminService admin, IProductService prod)
+        private readonly IWebHostEnvironment _hostEnv;
+        public ProductController(IWebHostEnvironment hostEnv, IProductService prod)
         {
             _prod = prod;
+            _hostEnv = hostEnv;
         }
         [Authorize(Roles ="Admin")]
         [HttpPost("add-new-product")]
@@ -46,7 +48,15 @@ namespace MicroBasket.Controllers
             var response = await _prod.GetAllProductsAsync();
             return Ok(response);
         }
+        [Authorize(Roles = "Admin")]
+        [HttpGet("low-stock")]
+        public async Task<IActionResult> LowStockProducts()
+        {
+            var response = await _prod.LowStockProductsAsync();
+            return Ok(response);
+        }
         [HttpGet("serach/{keyword}")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetSerchResult(string keyword)
         {
             var response = await _prod.SearchProductAsync(keyword);
@@ -57,6 +67,23 @@ namespace MicroBasket.Controllers
         {
             var response = await _prod.GetProductByIdAsync(pid);
             return Ok(response);
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpPost("upload-image")]
+        public async Task<IActionResult> UploadImage(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+            var fileName = Path.GetFileName(file.FileName);
+            var filePath = Path.Combine(_hostEnv.WebRootPath ?? "wwwroot","products", fileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                file.CopyTo(fileStream);
+            }
+            var imageUrl = $"/products/{fileName}";
+            return Ok(new { imageUrl });
         }
     }
 }

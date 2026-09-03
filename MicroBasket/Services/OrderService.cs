@@ -33,6 +33,14 @@ namespace MicroBasket.Services
         }
         public async Task<ServiceResponseDTO> PlaceOrderAsync(OrderRequestDTO dto)
         {
+            if(dto.CartDTOs.Count<=0)
+            {
+                return new ServiceResponseDTO()
+                {
+                    Success = false,
+                    Message = "Empty cart..."
+                };
+            }
             int n= await _order.PlaceOrder(dto);
             return n > 0 ?
                 new ServiceResponseDTO()
@@ -50,9 +58,14 @@ namespace MicroBasket.Services
         {
             return await _order.FilterOrderList(status);
         }
-        public async Task<OrderDetailsDTO> GetOrderDetailsAsync(long oid)
+        public async Task<List<OrderDetailsDTO>> GetOrderDetailsAsync(long oid)
         {
             return await _order.GetOrderDetails(oid);
         }
+        public async Task<List<OrderListDTO>> GetRecentOrderAsync()
+        {
+            return await _order.GetRecentOrder();
+        }
+
     }
 }

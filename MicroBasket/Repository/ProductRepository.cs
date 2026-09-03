@@ -87,5 +87,20 @@ namespace MicroBasket.Repository
                 return new Product();
             }
         }
+        public async Task<List<LowStockDTO>> LowStockProducts()
+        {
+            try
+            {
+                DynamicParameters param = new DynamicParameters();
+                param.Add("@action", "LowStock");
+                var con = GetConnection();
+
+                return (await con.QueryAsync<LowStockDTO>("ManageProducts", param, commandType: CommandType.StoredProcedure)).ToList();
+            }
+            catch
+            {
+                return new List<LowStockDTO>();
+            }
+        }
     }
 }

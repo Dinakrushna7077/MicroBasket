@@ -55,5 +55,9 @@ namespace MicroBasket.Services
         {
             return await _db.GetProductById(pid);
         }
+        public async Task<List<LowStockDTO>> LowStockProductsAsync()
+        {
+            return await _db.LowStockProducts();
+        }
     }
 }
