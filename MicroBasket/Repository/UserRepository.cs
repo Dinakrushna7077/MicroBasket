@@ -2,6 +2,7 @@
 using MicroBasket.Data;
 using MicroBasket.Models;
 using MicroBasket.Models.DTOs;
+using MicroBasket.Models.DTOs.Customer;
 using MicroBasket.Repository.Interfaces;
 using System.Data;
 
@@ -25,17 +26,17 @@ namespace MicroBasket.Repository
                 return new Customer();
             }
         }
-        public async Task<int> UpdateProfile(Customer cust)
+        public async Task<int> UpdateProfile(ProfileDTO dto)
         {
             try
             {
                 DynamicParameters param = new DynamicParameters();
                 param.Add("@action", "UpdateProfile");
-                param.Add("@id", cust.Id);
-                param.Add("@name", cust.UserName);
-                param.Add("@phone", cust.UserPhone);
-                param.Add("@email", cust.UserEmail);
-                param.Add("@add", cust.UserAdd);
+                param.Add("@id", dto.Id);
+                param.Add("@name", dto.UserName);
+                param.Add("@phone", dto.UserPhone);
+                param.Add("@email", dto.UserEmail);
+                param.Add("@add", dto.UserAdd);
                 var con = GetConnection();
                 int x = await con.ExecuteAsync("ProcManageuser", param, commandType: CommandType.StoredProcedure);
                 return await Task.FromResult(x);

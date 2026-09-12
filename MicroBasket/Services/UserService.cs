@@ -1,5 +1,6 @@
 ﻿using MicroBasket.Models;
 using MicroBasket.Models.DTOs;
+using MicroBasket.Models.DTOs.Customer;
 using MicroBasket.Repository.Interfaces;
 using MicroBasket.Services.Interfaces;
 
@@ -17,9 +18,9 @@ namespace MicroBasket.Services
         {
             return await _repo.GetUserById(id);
         }
-        public async Task<ServiceResponseDTO> UpdateProfileAsync(Customer cust)
+        public async Task<ServiceResponseDTO> UpdateProfileAsync(ProfileDTO dto)
         {
-            int n=await _repo.UpdateProfile(cust);
+            int n=await _repo.UpdateProfile(dto);
             return n > 0 ?
                new ServiceResponseDTO()
                {

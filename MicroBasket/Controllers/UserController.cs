@@ -1,5 +1,6 @@
 ﻿using MicroBasket.Models;
 using MicroBasket.Models.DTOs;
+using MicroBasket.Models.DTOs.Customer;
 using MicroBasket.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -26,9 +27,9 @@ namespace MicroBasket.Controllers
             return Ok(user);
         }
         [HttpPut("update-profile")]
-        public async Task<IActionResult> PutProfile(Customer cust)
+        public async Task<IActionResult> PutProfile(ProfileDTO dto)
         {
-            var response=await _db.UpdateProfileAsync(cust);
+            var response=await _db.UpdateProfileAsync(dto);
             return !response.Success ? BadRequest(response.Message) : Ok(response);
         }
         [HttpPatch("change-password")]
